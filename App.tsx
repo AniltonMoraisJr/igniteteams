@@ -7,6 +7,7 @@ import Groups from "@screens/Groups";
 
 import theme from "./src/theme";
 import { ThemeProvider } from "styled-components/native";
+import Loading from "@components/Loading";
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -15,7 +16,7 @@ export default function App() {
   });
 
   if (!fontsLoaded) {
-    return null;
+    return <Loading />;
   }
   return (
     <ThemeProvider theme={theme}>
