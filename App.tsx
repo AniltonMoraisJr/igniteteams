@@ -16,9 +16,6 @@ export default function App() {
     Roboto_700Bold,
   });
 
-  if (!fontsLoaded) {
-    return <Loading />;
-  }
   return (
     <ThemeProvider theme={theme}>
       <StatusBar
@@ -26,7 +23,7 @@ export default function App() {
         backgroundColor={"transparent"}
         translucent
       />
-      <Groups />
+      {fontsLoaded ? <Groups /> : <Loading />}
     </ThemeProvider>
   );
 }
