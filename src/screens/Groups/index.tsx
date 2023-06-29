@@ -1,12 +1,12 @@
 import React from "react";
-import { View } from "react-native";
 
-import { Container, Title } from "./styles";
+import Header from "@components/Header";
+import { Container } from "./styles";
 
 const Groups: React.FC = () => {
   return (
     <Container>
-      <Title>Groups</Title>
+      <Header />
     </Container>
   );
 };
