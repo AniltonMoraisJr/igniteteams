@@ -1,11 +1,20 @@
 import React from "react";
-import { Container, Logo } from "./styles";
+import { BackButton, BackIcon, Container, Logo } from "./styles";
 
 import logoImg from "@assets/logo.png";
 
-const Header: React.FC = () => {
+type Props = {
+  showBackButton?: boolean;
+};
+
+const Header: React.FC<Props> = ({ showBackButton = false }) => {
   return (
     <Container>
+      {showBackButton && (
+        <BackButton>
+          <BackIcon />
+        </BackButton>
+      )}
       <Logo source={logoImg} />
     </Container>
   );
