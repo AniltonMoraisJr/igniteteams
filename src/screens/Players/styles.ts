@@ -15,4 +15,5 @@ export const Form = styled.View`
   justify-content: center;
 
   border-radius: 6px;
+  margin-bottom: 24px;
 `;

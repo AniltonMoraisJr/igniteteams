@@ -1,10 +1,11 @@
 import React from "react";
 
-import { Container, Form } from "./styles";
+import ButtonIcon from "@components/ButtonIcon";
+import Filter from "@components/Filter";
 import Header from "@components/Header";
 import Highlight from "@components/Highlight";
-import ButtonIcon from "@components/ButtonIcon";
 import Input from "@components/Input";
+import { Container, Form } from "./styles";
 
 const Players: React.FC = () => {
   return (
@@ -19,6 +20,8 @@ const Players: React.FC = () => {
         <Input placeholder="Nome da pessoa" autoCorrect={false} />
         <ButtonIcon icon="add" />
       </Form>
+
+      <Filter title="Time A" />
     </Container>
   );
 };
