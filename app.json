@@ -23,6 +23,9 @@
         "backgroundColor": "#ffffff"
       }
     },
+    "adroidNavigationBar": {
+      "visible": false
+    },
     "web": {
       "favicon": "./assets/favicon.png"
     }
