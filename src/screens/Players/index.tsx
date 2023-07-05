@@ -7,6 +7,7 @@ import Highlight from "@components/Highlight";
 import Input from "@components/Input";
 import { Container, Form, HeaderList, NumbersOfPlayers } from "./styles";
 import { FlatList } from "react-native";
+import PlayerCard from "@components/PlayerCard";
 
 const Players: React.FC = () => {
   const [team, setTeam] = useState("Time A");
@@ -50,6 +51,18 @@ const Players: React.FC = () => {
         />
         <NumbersOfPlayers>{players.length}</NumbersOfPlayers>
       </HeaderList>
+      <FlatList
+        data={players}
+        keyExtractor={(item) => item}
+        renderItem={({ item }) => (
+          <PlayerCard
+            name={item}
+            onRemove={(player) => {
+              console.log(player);
+            }}
+          />
+        )}
+      />
     </Container>
   );
 };
