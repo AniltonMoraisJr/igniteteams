@@ -1,5 +1,8 @@
 import React from "react";
-import { createStackNavigator } from "@react-navigation/stack";
+import {
+  TransitionPresets,
+  createStackNavigator,
+} from "@react-navigation/stack";
 import Groups from "@screens/Groups";
 import NewGroup from "@screens/NewGroup";
 import Players from "@screens/Players";
@@ -11,6 +14,8 @@ const AppRoutes: React.FC = () => {
     <Navigator
       screenOptions={{
         headerShown: false,
+        presentation: "transparentModal",
+        ...TransitionPresets.SlideFromRightIOS,
       }}
     >
       <Screen name="groups" component={Groups} />
