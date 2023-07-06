@@ -1,16 +1,14 @@
 import {
-  useFonts,
   Roboto_400Regular,
   Roboto_700Bold,
+  useFonts,
 } from "@expo-google-fonts/roboto";
-import Groups from "@screens/Groups";
-
-import theme from "./src/theme";
-import { ThemeProvider } from "styled-components/native";
-import Loading from "@components/Loading";
 import { StatusBar } from "react-native";
-import NewGroup from "@screens/NewGroup";
-import Players from "@screens/Players";
+import { ThemeProvider } from "styled-components/native";
+import theme from "./src/theme";
+
+import Loading from "@components/Loading";
+import Routes from "@routes/index";
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -25,7 +23,7 @@ export default function App() {
         backgroundColor={"transparent"}
         translucent
       />
-      {fontsLoaded ? <Players /> : <Loading />}
+      {fontsLoaded ? <Routes /> : <Loading />}
     </ThemeProvider>
   );
 }

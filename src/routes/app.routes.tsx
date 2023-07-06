@@ -6,9 +6,13 @@ import Players from "@screens/Players";
 
 const { Navigator, Screen } = createStackNavigator();
 
-const Routes: React.FC = () => {
+const AppRoutes: React.FC = () => {
   return (
-    <Navigator>
+    <Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
       <Screen name="groups" component={Groups} />
       <Screen name="new" component={NewGroup} />
       <Screen name="players" component={Players} />
@@ -16,4 +20,4 @@ const Routes: React.FC = () => {
   );
 };
 
-export default Routes;
+export default AppRoutes;
