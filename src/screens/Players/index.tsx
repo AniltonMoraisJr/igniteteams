@@ -1,28 +1,70 @@
-import React, { useState } from "react";
-import { FlatList } from "react-native";
-import { useRoute } from "@react-navigation/native";
+import React, { useState, useCallback, useEffect } from "react";
+import { useFocusEffect, useRoute } from "@react-navigation/native";
+import { FlatList, Alert } from "react-native";
 
 import { Container, Form, HeaderList, NumbersOfPlayers } from "./styles";
 
+import Button from "@components/Button";
 import ButtonIcon from "@components/ButtonIcon";
 import Filter from "@components/Filter";
 import Header from "@components/Header";
 import Highlight from "@components/Highlight";
 import Input from "@components/Input";
-import PlayerCard from "@components/PlayerCard";
 import ListEmpty from "@components/ListEmpty";
-import Button from "@components/Button";
+import PlayerCard from "@components/PlayerCard";
+import { AppError } from "@utils/AppError";
+import { playerAddByGroup } from "@storage/player/playerAddByGroup";
+import { playerGetByGroupAndTeam } from "@storage/player/playerGetByGroupAndTeam";
+import { PlayerStorageDTO } from "@storage/player/PlayerStorageDTO";
 
 type RouteParams = {
   group: string;
 };
 
 const Players: React.FC = () => {
+  const [newPlayerName, setNewPlayerName] = useState("");
   const [team, setTeam] = useState("Time A");
-  const [players, setPlayers] = useState([]);
+  const [players, setPlayers] = useState<PlayerStorageDTO[]>([]);
 
   const route = useRoute();
   const { group } = route.params as RouteParams;
+
+  const fetchPlayersByTeam = useCallback(async () => {
+    const playersByTeam = await playerGetByGroupAndTeam(group, team);
+    setPlayers(playersByTeam);
+  }, [group, team]);
+
+  const handleAddPlayer = useCallback(async () => {
+    if (newPlayerName.trim().length === 0) {
+      return Alert.alert(
+        "Nova pessoa",
+        "Informe o nome da pessoa para adicionar"
+      );
+    }
+
+    const newPlayer = {
+      name: newPlayerName,
+      team: team,
+    };
+
+    try {
+      await playerAddByGroup(newPlayer, group);
+    } catch (error) {
+      if (error instanceof AppError) {
+        Alert.alert("Nova pessoa", error.message);
+      } else {
+        console.error(error);
+      }
+    }
+  }, [newPlayerName, team]);
+
+  useFocusEffect(() => {
+    fetchPlayersByTeam();
+  });
+
+  useEffect(() => {
+    fetchPlayersByTeam();
+  }, [team]);
 
   return (
     <Container>
@@ -30,22 +72,17 @@ const Players: React.FC = () => {
       <Highlight title={group} subtitle="Adicione a galera e separe os times" />
 
       <Form>
-        <Input placeholder="Nome da pessoa" autoCorrect={false} />
-        <ButtonIcon icon="add" />
+        <Input
+          placeholder="Nome da pessoa"
+          autoCorrect={false}
+          onChangeText={setNewPlayerName}
+        />
+        <ButtonIcon icon="add" onPress={handleAddPlayer} />
       </Form>
       <HeaderList>
         <FlatList
           style={{ width: "80%" }}
-          data={[
-            "Time A",
-            "Time B",
-            "Time C",
-            "Time D",
-            "Time E",
-            "Time F",
-            "Time G",
-            "Time H",
-          ]}
+          data={["Time A", "Time B"]}
           keyExtractor={(item) => item}
           renderItem={({ item }) => (
             <Filter
@@ -61,10 +98,10 @@ const Players: React.FC = () => {
       </HeaderList>
       <FlatList
         data={players}
-        keyExtractor={(item) => item}
+        keyExtractor={(item) => item.name}
         renderItem={({ item }) => (
           <PlayerCard
-            name={item}
+            name={item.name}
             onRemove={(player) => {
               console.log(player);
             }}
