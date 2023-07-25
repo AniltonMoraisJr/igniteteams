@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useRef } from "react";
 import { useFocusEffect, useRoute } from "@react-navigation/native";
 import { FlatList, Alert } from "react-native";
 
@@ -16,12 +16,15 @@ import { AppError } from "@utils/AppError";
 import { playerAddByGroup } from "@storage/player/playerAddByGroup";
 import { playerGetByGroupAndTeam } from "@storage/player/playerGetByGroupAndTeam";
 import { PlayerStorageDTO } from "@storage/player/PlayerStorageDTO";
+import { TextInput } from "react-native-gesture-handler";
 
 type RouteParams = {
   group: string;
 };
 
 const Players: React.FC = () => {
+  const inputRef = useRef<TextInput>(null);
+
   const [newPlayerName, setNewPlayerName] = useState("");
   const [team, setTeam] = useState("Time A");
   const [players, setPlayers] = useState<PlayerStorageDTO[]>([]);
@@ -49,6 +52,9 @@ const Players: React.FC = () => {
 
     try {
       await playerAddByGroup(newPlayer, group);
+      inputRef.current?.blur();
+      setNewPlayerName("");
+      fetchPlayersByTeam();
     } catch (error) {
       if (error instanceof AppError) {
         Alert.alert("Nova pessoa", error.message);
@@ -57,10 +63,6 @@ const Players: React.FC = () => {
       }
     }
   }, [newPlayerName, team]);
-
-  useFocusEffect(() => {
-    fetchPlayersByTeam();
-  });
 
   useEffect(() => {
     fetchPlayersByTeam();
@@ -73,9 +75,13 @@ const Players: React.FC = () => {
 
       <Form>
         <Input
+          inputRef={inputRef}
+          value={newPlayerName}
           placeholder="Nome da pessoa"
           autoCorrect={false}
           onChangeText={setNewPlayerName}
+          onSubmitEditing={handleAddPlayer}
+          returnKeyType="done"
         />
         <ButtonIcon icon="add" onPress={handleAddPlayer} />
       </Form>
