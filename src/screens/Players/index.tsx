@@ -17,6 +17,7 @@ import { playerAddByGroup } from "@storage/player/playerAddByGroup";
 import { playerGetByGroupAndTeam } from "@storage/player/playerGetByGroupAndTeam";
 import { PlayerStorageDTO } from "@storage/player/PlayerStorageDTO";
 import { TextInput } from "react-native-gesture-handler";
+import { playerRemoveByGroup } from "@storage/player/playerRemoveByGroup";
 
 type RouteParams = {
   group: string;
@@ -64,6 +65,19 @@ const Players: React.FC = () => {
     }
   }, [newPlayerName, team]);
 
+  const handleRemovePlayer = useCallback(
+    async (playerName: string) => {
+      try {
+        await playerRemoveByGroup(playerName, group);
+        fetchPlayersByTeam();
+      } catch (error) {
+        console.error(error);
+        Alert.alert("Remover pessoa", "Não foi possivel remover pessoa");
+      }
+    },
+    [group, team]
+  );
+
   useEffect(() => {
     fetchPlayersByTeam();
   }, [team]);
@@ -108,8 +122,8 @@ const Players: React.FC = () => {
         renderItem={({ item }) => (
           <PlayerCard
             name={item.name}
-            onRemove={(player) => {
-              console.log(player);
+            onRemove={() => {
+              handleRemovePlayer(item.name);
             }}
           />
         )}
