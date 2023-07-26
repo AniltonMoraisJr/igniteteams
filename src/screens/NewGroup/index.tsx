@@ -20,9 +20,9 @@ const NewGroup: React.FC = () => {
       navigation.navigate("players", { group });
     } catch (error) {
       if (error instanceof AppError) {
-        Alert.alert("Novo Grupo", error.message);
+        Alert.alert("Nova Turma", error.message);
       } else {
-        Alert.alert("Novo Grupo", "Não foi possível criar novo grupo");
+        Alert.alert("Nova Turma", "Não foi possível criar uma nova turma");
         console.error(error);
       }
     }
@@ -40,6 +40,8 @@ const NewGroup: React.FC = () => {
           value={group}
           placeholder="Nome da turma"
           onChangeText={setGroup}
+          returnKeyType="done"
+          onSubmitEditing={handleNew}
         />
         <Button title="Criar" style={{ marginTop: 20 }} onPress={handleNew} />
       </Content>
